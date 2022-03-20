@@ -4,19 +4,35 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class PercolationTest {
   @Test
+  void constructor() {
+    assertThrows(IllegalArgumentException.class, () -> {
+      new Percolation(0);
+    });
+
+    assertThrows(IllegalArgumentException.class, () -> {
+      new Percolation(-1);
+    });
+
+    assertDoesNotThrow(() -> {
+      new Percolation(1);
+      new Percolation(10);
+    });
+  }
+
+  @Test
   void positionToListIndex() {
     assertAll("valid positions", () -> {
       Percolation pc = new Percolation(5);
-      assertEquals(0, pc.positionToListIndex(1,1));
-      assertEquals(9, pc.positionToListIndex(2,5));
-      assertEquals(15, pc.positionToListIndex(4,1));
-      assertEquals(19, pc.positionToListIndex(4,5));
-      assertEquals(24, pc.positionToListIndex(5,5));
+      assertEquals(0, pc.positionToListIndex(1, 1));
+      assertEquals(9, pc.positionToListIndex(2, 5));
+      assertEquals(15, pc.positionToListIndex(4, 1));
+      assertEquals(19, pc.positionToListIndex(4, 5));
+      assertEquals(24, pc.positionToListIndex(5, 5));
 
       pc = new Percolation(3);
-      assertEquals(0, pc.positionToListIndex(1,1));
-      assertEquals(5, pc.positionToListIndex(2,3));
-      assertEquals(8, pc.positionToListIndex(3,3));
+      assertEquals(0, pc.positionToListIndex(1, 1));
+      assertEquals(5, pc.positionToListIndex(2, 3));
+      assertEquals(8, pc.positionToListIndex(3, 3));
     });
 
     assertAll("invalid positions", () -> {
@@ -37,19 +53,19 @@ public class PercolationTest {
       });
 
       assertThrows(IndexOutOfBoundsException.class, () -> {
-        new Percolation(5).positionToListIndex(0,5);
+        new Percolation(5).positionToListIndex(0, 5);
       });
 
       assertThrows(IndexOutOfBoundsException.class, () -> {
-        new Percolation(5).positionToListIndex(1,0);
+        new Percolation(5).positionToListIndex(1, 0);
       });
 
       assertThrows(IndexOutOfBoundsException.class, () -> {
-        new Percolation(5).positionToListIndex(-1,5);
+        new Percolation(5).positionToListIndex(-1, 5);
       });
 
       assertThrows(IndexOutOfBoundsException.class, () -> {
-        new Percolation(5).positionToListIndex(1,-1);
+        new Percolation(5).positionToListIndex(1, -1);
       });
     });
   }
@@ -59,18 +75,57 @@ public class PercolationTest {
     int gridSize = 5;
     Percolation pc = new Percolation(5);
 
-    for (int i = 0; i < gridSize; i++) {
-      for (int j = 0; j < gridSize; j++) {
-        assertFalse(pc.isOpen(i + 1, j + 1));
-      }
-    }
+    assertAll("valid positions", () -> {
 
-    for (int i = 0; i < gridSize; i++) {
-      for (int j = 0; j < gridSize; j++) {
-        pc.open(i + 1, j +1 );
-        assertTrue(pc.isOpen(i + 1, j + 1));
+      for (int i = 0; i < gridSize; i++) {
+        for (int j = 0; j < gridSize; j++) {
+          assertFalse(pc.isOpen(i + 1, j + 1));
+        }
       }
-    }
+
+      for (int i = 0; i < gridSize; i++) {
+        for (int j = 0; j < gridSize; j++) {
+          pc.open(i + 1, j + 1);
+          assertTrue(pc.isOpen(i + 1, j + 1));
+        }
+      }
+
+    });
+
+
+    assertAll("invalid positions", () -> {
+      assertThrows(IllegalArgumentException.class, () -> {
+        pc.isOpen(0, 1);
+      });
+
+      assertThrows(IllegalArgumentException.class, () -> {
+        pc.open(0, 1);
+      });
+
+      assertThrows(IllegalArgumentException.class, () -> {
+        pc.isOpen(-1, 1);
+      });
+
+      assertThrows(IllegalArgumentException.class, () -> {
+        pc.open(-1, 1);
+      });
+
+      assertThrows(IllegalArgumentException.class, () -> {
+        pc.isOpen(6, 1);
+      });
+
+      assertThrows(IllegalArgumentException.class, () -> {
+        pc.open(6, 1);
+      });
+
+      assertThrows(IllegalArgumentException.class, () -> {
+        pc.isOpen(5, 6);
+      });
+
+      assertThrows(IllegalArgumentException.class, () -> {
+        pc.open(5, 6);
+      });
+    });
   }
 
   @Test
@@ -80,18 +135,18 @@ public class PercolationTest {
 
     assertEquals(0, pc.numberOfOpenSites());
 
-    pc.open(1,1);
+    pc.open(1, 1);
     assertEquals(1, pc.numberOfOpenSites());
 
-    pc.open(2,1);
+    pc.open(2, 1);
     assertEquals(2, pc.numberOfOpenSites());
 
-    pc.open(2,1);
+    pc.open(2, 1);
     assertEquals(2, pc.numberOfOpenSites());
 
     for (int i = 0; i < gridSize; i++) {
       for (int j = 0; j < gridSize; j++) {
-        pc.open(i + 1, j +1 );
+        pc.open(i + 1, j + 1);
       }
     }
 
@@ -130,19 +185,45 @@ public class PercolationTest {
     int gridSize = 8;
     Percolation pc = new Percolation(gridSize);
 
-    pc.open(1, 3);
-    pc.open(8, 6);
-    assertFalse(pc.isFull(4, 7));
+    assertAll("valid position", () -> {
 
-    pc.open(3, 7);
-    pc.open(2, 7);
-    pc.open(2, 6);
-    pc.open(2, 5);
-    pc.open(2, 4);
-    pc.open(2, 3);
-    assertFalse(pc.isFull(4, 7));
 
-    pc.open(4, 7);
-    assertTrue(pc.isFull(4,7));
+      pc.open(1, 3);
+      pc.open(8, 6);
+      assertFalse(pc.isFull(4, 7));
+
+      pc.open(3, 7);
+      pc.open(2, 7);
+      pc.open(2, 6);
+      pc.open(2, 5);
+      pc.open(2, 4);
+      pc.open(2, 3);
+      assertFalse(pc.isFull(4, 7));
+
+      pc.open(4, 7);
+      assertTrue(pc.isFull(4, 7));
+
+    });
+
+    assertAll("invalid positions", () -> {
+      assertThrows(IllegalArgumentException.class, () -> {
+        pc.isFull(0, 1);
+      });
+
+
+      assertThrows(IllegalArgumentException.class, () -> {
+        pc.isFull(-1, 1);
+      });
+
+
+      assertThrows(IllegalArgumentException.class, () -> {
+        pc.isFull(9, 1);
+      });
+
+
+      assertThrows(IllegalArgumentException.class, () -> {
+        pc.isFull(8, 9);
+      });
+    });
   }
 }

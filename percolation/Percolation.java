@@ -9,6 +9,10 @@ public class Percolation {
   private int openSites;
 
   public Percolation(int gridSize) {
+    if (gridSize < 1) {
+      throw new IllegalArgumentException("gridSize must be >= 1 " + gridSize);
+    }
+
     this.gridSize = gridSize;
     this.grid = new boolean[gridSize][gridSize];
 
@@ -21,6 +25,8 @@ public class Percolation {
   }
 
   public void open(int row, int col) {
+    validatePosition(row, col);
+
     if (isOpen(row, col)) {
       return;
     }
@@ -64,10 +70,13 @@ public class Percolation {
   }
 
   public boolean isOpen(int row, int col) {
+    validatePosition(row, col);
     return grid[row - 1][col - 1];
   }
 
   public boolean isFull(int row, int col) {
+    validatePosition(row, col);
+
     int index = positionToListIndex(row, col);
 
     return this.unionFinder.find(virtualTop) == this.unionFinder.find(index);
@@ -93,4 +102,9 @@ public class Percolation {
     return (row - 1) * gridSize + (col - 1);
   }
 
+  private void validatePosition(int row, int col) {
+    if (isOutOfBounds(row, col)) {
+      throw new IllegalArgumentException("row and/or column is invalid (" + row + ", " + col + ")");
+    }
+  }
 }
