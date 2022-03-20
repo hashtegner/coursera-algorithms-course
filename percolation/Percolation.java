@@ -1,13 +1,12 @@
 import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 
 public class Percolation {
-  final private WeightedQuickUnionUF unionFinder;
-  final private WeightedQuickUnionUF unionFinderFullPath;
-  final private int gridSize;
-  final private int virtualTop;
-  final private int virtualBottom;
-
-  private boolean[][] grid;
+  private final WeightedQuickUnionUF unionFinder;
+  private final WeightedQuickUnionUF unionFinderFullPath;
+  private final int gridSize;
+  private final int virtualTop;
+  private final int virtualBottom;
+  private final boolean[][] grid;
   private int openSites;
 
   public Percolation(int gridSize) {
@@ -20,6 +19,7 @@ public class Percolation {
 
     int squaredGrid = gridSize * gridSize;
     this.unionFinder = new WeightedQuickUnionUF(squaredGrid + 2); // virtual sizes
+    this.unionFinderFullPath = new WeightedQuickUnionUF(squaredGrid + 1);
     this.virtualTop = squaredGrid;
     this.virtualBottom = squaredGrid + 1;
 
@@ -44,6 +44,7 @@ public class Percolation {
 
     if (row == 1) {
       this.unionFinder.union(currentIndex, virtualTop);
+      this.unionFinderFullPath.union(currentIndex, virtualTop);
     }
 
     if (row == gridSize) {
@@ -53,21 +54,25 @@ public class Percolation {
     if (!isOutOfBounds(row, left) && isOpen(row, left)) {
       int leftIndex = positionToListIndex(row, left);
       this.unionFinder.union(currentIndex, leftIndex);
+      this.unionFinderFullPath.union(currentIndex, leftIndex);
     }
 
     if (!isOutOfBounds(row, right) && isOpen(row, right)) {
       int rightIndex = positionToListIndex(row, right);
       this.unionFinder.union(currentIndex, rightIndex);
+      this.unionFinderFullPath.union(currentIndex, rightIndex);
     }
 
     if (!isOutOfBounds(top, col) && isOpen(top, col)) {
       int topIndex = positionToListIndex(top, col);
       this.unionFinder.union(currentIndex, topIndex);
+      this.unionFinderFullPath.union(currentIndex, topIndex);
     }
 
     if (!isOutOfBounds(bottom, col) && isOpen(bottom, col)) {
       int bottomIndex = positionToListIndex(bottom, col);
       this.unionFinder.union(currentIndex, bottomIndex);
+      this.unionFinderFullPath.union(currentIndex, bottomIndex);
     }
   }
 
@@ -80,8 +85,7 @@ public class Percolation {
     validatePosition(row, col);
 
     int index = positionToListIndex(row, col);
-
-    return this.unionFinder.find(virtualTop) == this.unionFinder.find(index);
+    return this.unionFinderFullPath.find(virtualTop) == this.unionFinderFullPath.find(index);
   }
 
   public int numberOfOpenSites() {
