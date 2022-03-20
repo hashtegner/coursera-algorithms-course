@@ -90,11 +90,11 @@ public class Percolation {
     return this.unionFinder.find(virtualTop) == this.unionFinder.find(virtualBottom);
   }
 
-  public boolean isOutOfBounds(int row, int col) {
+  private boolean isOutOfBounds(int row, int col) {
     return row > gridSize || col > gridSize || row < 1 || col < 1;
   }
 
-  public int positionToListIndex(int row, int col) {
+  private int positionToListIndex(int row, int col) {
     if (isOutOfBounds(row, col)) {
       throw new IndexOutOfBoundsException("invalid index for row and/or column (" + row + ", " + col + ", " + gridSize + ")");
     }

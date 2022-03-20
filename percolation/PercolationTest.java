@@ -20,57 +20,6 @@ public class PercolationTest {
   }
 
   @Test
-  void positionToListIndex() {
-    assertAll("valid positions", () -> {
-      Percolation pc = new Percolation(5);
-      assertEquals(0, pc.positionToListIndex(1, 1));
-      assertEquals(9, pc.positionToListIndex(2, 5));
-      assertEquals(15, pc.positionToListIndex(4, 1));
-      assertEquals(19, pc.positionToListIndex(4, 5));
-      assertEquals(24, pc.positionToListIndex(5, 5));
-
-      pc = new Percolation(3);
-      assertEquals(0, pc.positionToListIndex(1, 1));
-      assertEquals(5, pc.positionToListIndex(2, 3));
-      assertEquals(8, pc.positionToListIndex(3, 3));
-    });
-
-    assertAll("invalid positions", () -> {
-      assertThrows(IndexOutOfBoundsException.class, () -> {
-        new Percolation(5).positionToListIndex(5, 6);
-      });
-
-      assertThrows(IndexOutOfBoundsException.class, () -> {
-        new Percolation(5).positionToListIndex(6, 5);
-      });
-
-      assertThrows(IndexOutOfBoundsException.class, () -> {
-        new Percolation(5).positionToListIndex(4, 6);
-      });
-
-      assertThrows(IndexOutOfBoundsException.class, () -> {
-        new Percolation(5).positionToListIndex(1, 6);
-      });
-
-      assertThrows(IndexOutOfBoundsException.class, () -> {
-        new Percolation(5).positionToListIndex(0, 5);
-      });
-
-      assertThrows(IndexOutOfBoundsException.class, () -> {
-        new Percolation(5).positionToListIndex(1, 0);
-      });
-
-      assertThrows(IndexOutOfBoundsException.class, () -> {
-        new Percolation(5).positionToListIndex(-1, 5);
-      });
-
-      assertThrows(IndexOutOfBoundsException.class, () -> {
-        new Percolation(5).positionToListIndex(1, -1);
-      });
-    });
-  }
-
-  @Test
   void open() {
     int gridSize = 5;
     Percolation pc = new Percolation(5);
