@@ -3,11 +3,15 @@ import edu.princeton.cs.algs4.StdRandom;
 import edu.princeton.cs.algs4.StdStats;
 
 public class PercolationStats {
+  private static final double CONFIDENCE = 1.96;
   private final int gridSize;
   private final int trials;
   private final double[] results;
 
   public PercolationStats(int gridSize, int trials) {
+    if (gridSize < 1 || trials < 1) {
+      throw new IllegalArgumentException("invalid grid size and/or trials (" + gridSize + ", " + trials + ")");
+    }
     this.gridSize = gridSize;
     this.trials = trials;
     this.results = new double[trials];
@@ -54,10 +58,10 @@ public class PercolationStats {
   }
 
   public double confidenceLo() {
-    return mean() - ((1.96 * stddev()) / Math.sqrt(trials));
+    return mean() - (CONFIDENCE * stddev() / Math.sqrt(trials));
   }
 
   public double confidenceHi() {
-    return mean() + (1.96 * stddev() / Math.sqrt(trials));
+    return mean() + (CONFIDENCE * stddev() / Math.sqrt(trials));
   }
 }

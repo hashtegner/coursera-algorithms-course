@@ -131,11 +131,11 @@ public class PercolationTest {
 
   @Test
   void isFull() {
-    int gridSize = 8;
-    Percolation pc = new Percolation(gridSize);
-
     assertAll("valid position", () -> {
+      int gridSize = 8;
+      Percolation pc = new Percolation(gridSize);
 
+      assertFalse(pc.isFull(4, 7));
 
       pc.open(1, 3);
       pc.open(8, 6);
@@ -154,7 +154,19 @@ public class PercolationTest {
 
     });
 
+    assertAll("grid 1x1", () -> {
+      int gridSize = 1;
+      Percolation pc = new Percolation(gridSize);
+
+      assertFalse(pc.isFull(1,1));
+      pc.open(1,1);
+      assertTrue(pc.isFull(1,1));
+    });
+
     assertAll("invalid positions", () -> {
+      int gridSize = 8;
+      Percolation pc = new Percolation(gridSize);
+
       assertThrows(IllegalArgumentException.class, () -> {
         pc.isFull(0, 1);
       });
